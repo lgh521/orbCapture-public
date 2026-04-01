@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OrbCapture — Native screen capture and recording for macOS</title>
+  <meta name="description" content="OrbCapture is a native macOS app for fast screenshots and focused screen recordings. No cloud. No account. Captures stay on your Mac." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f11;
+      --surface: #1a1a1f;
+      --border: #2a2a32;
+      --accent: #5b7fff;
+      --accent-light: #7c9bff;
+      --text: #e8e8f0;
+      --muted: #8888a0;
+      --radius: 12px;
+      --max-w: 760px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 16px;
+    }
+
+    a { color: var(--accent-light); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Header ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 64px 24px 56px;
+      text-align: center;
+    }
+
+    .app-icon {
+      width: 96px;
+      height: 96px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #5b7fff 0%, #a05bff 100%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 44px;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 24px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Main content ── */
+    main {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    section { padding: 48px 0 0; }
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    p { color: var(--muted); margin-bottom: 12px; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── Feature grid ── */
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 520px) {
+      .features { grid-template-columns: 1fr; }
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+
+    .feature-card .icon {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .feature-card strong {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .feature-card span {
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+    /* ── Privacy box ── */
+    .privacy-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .privacy-box ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .privacy-box li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.9375rem;
+    }
+
+    .privacy-box li::before {
+      content: "✓";
+      color: #4cd964;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Support ── */
+    .support-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      text-align: center;
+    }
+
+    .support-box p { margin-bottom: 16px; font-size: 0.9375rem; }
+
+    .support-email {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      padding: 10px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    .support-email:hover { background: var(--accent-light); text-decoration: none; }
+
+    /* ── App Store button ── */
+    .appstore-section {
+      text-align: center;
+      padding: 48px 0 0;
+    }
+
+    .appstore-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: #000;
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid #333;
+      transition: background 0.2s;
+    }
+
+    .appstore-btn:hover { background: #1a1a1a; text-decoration: none; }
+    .appstore-btn svg { flex-shrink: 0; }
+
+    /* ── FAQ ── */
+    .faq { display: flex; flex-direction: column; gap: 16px; }
+
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+    }
+
+    .faq-item strong {
+      display: block;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .faq-item p { font-size: 0.875rem; margin: 0; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--muted); }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="app-icon">⌨️</div>
+  <h1>OrbCapture</h1>
+  <p class="tagline">Native screen capture and recording for macOS. No cloud. No account. Everything stays on your Mac.</p>
+  <span class="badge">macOS 14 Sonoma or later</span>
+</header>
+
+<main>
+
+  <!-- App Store -->
+  <section class="appstore-section">
+    <a class="appstore-btn" href="https://apps.apple.com/app/id6761210613" target="_blank" rel="noopener">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Download on the Mac App Store
+    </a>
+  </section>
+
+  <!-- Features -->
+  <section>
+    <h2>Features</h2>
+    <div class="features">
+      <div class="feature-card">
+        <span class="icon">📸</span>
+        <strong>Screenshots</strong>
+        <span>Full-screen, area, or window — captured instantly with global shortcuts.</span>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🎬</span>
+        <strong>Screen recording</strong>
+        <span>Record a visible screen, a custom region, or a single app window.</span>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🫧</span>
+        <strong>Camera bubble</strong>
+        <span>Optional floating circular camera overlay for demos and walkthroughs.</span>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🎙️</span>
+        <strong>Microphone recording</strong>
+        <span>Include your voice in recordings when you need to explain what's on screen.</span>
+      </div>
+      <div class="feature-card">
+        <span class="icon">📁</span>
+        <strong>Local library</strong>
+        <span>Browse and manage all your captures directly on your Mac.</span>
+      </div>
+      <div class="feature-card">
+        <span class="icon">⌨️</span>
+        <strong>Global shortcuts</strong>
+        <span>Trigger any capture mode without leaving your current app.</span>
+      </div>
+      <div class="feature-card">
+        <span class="icon">✏️</span>
+        <strong>Watermark text</strong>
+        <span>Add a custom floating text watermark to branded recordings.</span>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🎞️</span>
+        <strong>GIF export</strong>
+        <span>Convert short recordings to animated GIFs for quick sharing.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Privacy -->
+  <section id="privacy">
+    <h2>Privacy</h2>
+    <div class="privacy-box">
+      <ul>
+        <li>All captures are stored locally on your Mac — nothing is uploaded anywhere.</li>
+        <li>No account is required. The App Store version is fully unlocked at purchase.</li>
+        <li>No analytics, no crash reporters, and no third-party tracking SDKs are included.</li>
+        <li>Screen, microphone, and camera access are requested only when you use those features.</li>
+        <li>OrbCapture does not collect, transmit, or share any personal data.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <h2>FAQ</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <strong>What macOS version do I need?</strong>
+        <p>OrbCapture requires macOS 14 Sonoma or later.</p>
+      </div>
+      <div class="faq-item">
+        <strong>Do I need to create an account?</strong>
+        <p>No. The App Store version is fully unlocked after purchase — no sign-in required.</p>
+      </div>
+      <div class="faq-item">
+        <strong>Where are my captures saved?</strong>
+        <p>By default, captures are saved to a local app folder on your Mac. You can choose a custom save location in Settings.</p>
+      </div>
+      <div class="faq-item">
+        <strong>Can I record with audio?</strong>
+        <p>Yes. Enable microphone recording in the recording options before starting a recording session.</p>
+      </div>
+      <div class="faq-item">
+        <strong>Is there a subscription?</strong>
+        <p>No. OrbCapture is a one-time purchase on the Mac App Store.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Support -->
+  <section id="support">
+    <h2>Support</h2>
+    <div class="support-box">
+      <p>Have a question or run into an issue? Send an email and we'll get back to you.</p>
+      <a class="support-email" href="mailto:c230023c@gmail.com">c230023c@gmail.com</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Copyright &copy; 2026 Richard. All rights reserved. &nbsp;·&nbsp; <a href="#privacy">Privacy Policy</a> &nbsp;·&nbsp; <a href="#support">Support</a></p>
+</footer>
+
+</body>
+</html>
